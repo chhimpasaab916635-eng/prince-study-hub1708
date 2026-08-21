@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050816" />
+  <title>Study Hub</title>
+
+  <style>
+    :root{
+      --bg:#050816;
+      --bg-soft:#0a1022;
+      --card:rgba(15,23,42,.78);
+      --card-2:rgba(10,18,36,.88);
+      --text:#f8fbff;
+      --muted:#9aa7bd;
+      --primary:#24b7ff;
+      --primary-2:#6f7bff;
+      --success:#23d18b;
+      --border:rgba(90,170,255,.20);
+      --shadow:0 18px 60px rgba(0,0,0,.38);
+      --radius:24px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    html{scroll-behavior:smooth}
+
+    body{
+      min-height:100vh;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(36,183,255,.16), transparent 26%),
+        radial-gradient(circle at 85% 18%, rgba(111,123,255,.14), transparent 28%),
+        radial-gradient(circle at 50% 95%, rgba(36,183,255,.10), transparent 30%),
+        var(--bg);
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size:42px 42px;
+      mask-image:linear-gradient(to bottom,rgba(0,0,0,.85),transparent 90%);
+    }
+
+    a{text-decoration:none;color:inherit}
+
+    .wrap{
+      width:min(1120px, calc(100% - 32px));
+      margin:auto;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:20;
+      backdrop-filter:blur(18px);
+      background:rgba(5,8,22,.70);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    .nav{
+      min-height:76px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      letter-spacing:.4px;
+    }
+
+    .brand-mark{
+      width:46px;
+      height:46px;
+      display:grid;
+      place-items:center;
+      border-radius:16px;
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      box-shadow:0 0 28px rgba(36,183,255,.35);
+      font-size:23px;
+    }
+
+    .brand-text span{
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:600;
+      margin-top:2px;
+      letter-spacing:.6px;
+    }
+
+    .nav-btn{
+      padding:12px 18px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(36,183,255,.08);
+      color:#dff5ff;
+      font-weight:700;
+      transition:.25s ease;
+    }
+
+    .nav-btn:hover{
+      transform:translateY(-2px);
+      background:rgba(36,183,255,.15);
+      box-shadow:0 10px 24px rgba(36,183,255,.15);
+    }
+
+    .hero{
+      padding:84px 0 48px;
+      text-align:center;
+      position:relative;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 14px;
+      border-radius:999px;
+      background:rgba(36,183,255,.10);
+      border:1px solid rgba(36,183,255,.22);
+      color:#c9f0ff;
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:22px;
+    }
+
+    .badge-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:var(--success);
+      box-shadow:0 0 14px var(--success);
+    }
+
+    .hero h1{
+      font-size:clamp(42px,7vw,78px);
+      line-height:1.02;
+      letter-spacing:-2.8px;
+      max-width:860px;
+      margin:0 auto;
+    }
+
+    .gradient-text{
+      background:linear-gradient(90deg,#ffffff 0%,#88ddff 35%,#7186ff 72%,#ffffff 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .hero p{
+      max-width:680px;
+      margin:22px auto 0;
+      color:var(--muted);
+      font-size:clamp(16px,2vw,19px);
+      line-height:1.75;
+    }
+
+    .hero-actions{
+      display:flex;
+      justify-content:center;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:30px;
+    }
+
+    .btn{
+      min-width:180px;
+      padding:15px 24px;
+      border-radius:16px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      font-weight:800;
+      transition:.25s ease;
+      border:1px solid transparent;
+    }
+
+    .btn-primary{
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      box-shadow:0 16px 36px rgba(36,183,255,.24);
+    }
+
+    .btn-secondary{
+      background:rgba(255,255,255,.05);
+      border-color:rgba(255,255,255,.10);
+      color:#e7eefb;
+    }
+
+    .btn:hover{
+      transform:translateY(-3px) scale(1.01);
+      box-shadow:0 18px 40px rgba(36,183,255,.25);
+    }
+
+    .panel{
+      margin-top:28px;
+      padding:24px;
+      border-radius:var(--radius);
+      background:linear-gradient(180deg,rgba(15,23,42,.86),rgba(8,13,28,.92));
+      border:1px solid rgba(255,255,255,.07);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(16px);
+    }
+
+    .toolbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:20px;
+    }
+
+    .section-title h2{
+      font-size:26px;
+      letter-spacing:-.5px;
+    }
+
+    .section-title p{
+      color:var(--muted);
+      font-size:14px;
+      margin-top:6px;
+    }
+
+    .search-box{
+      flex:1;
+      min-width:240px;
+      max-width:390px;
+      position:relative;
+    }
+
+    .search-box input{
+      width:100%;
+      height:50px;
+      border:none;
+      outline:none;
+      border-radius:16px;
+      padding:0 48px 0 16px;
+      background:rgba(255,255,255,.055);
+      color:var(--text);
+      border:1px solid rgba(255,255,255,.08);
+      font-size:15px;
+      transition:.2s ease;
+    }
+
+    .search-box input:focus{
+      border-color:rgba(36,183,255,.55);
+      box-shadow:0 0 0 4px rgba(36,183,255,.10);
+    }
+
+    .search-icon{
+      position:absolute;
+      right:16px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#77d8ff;
+      font-size:20px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+    }
+
+    .card{
+      min-height:185px;
+      border-radius:21px;
+      padding:20px;
+      position:relative;
+      overflow:hidden;
+      background:
+        linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018)),
+        var(--card-2);
+      border:1px solid var(--border);
+      transition:.28s ease;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      width:130px;
+      height:130px;
+      right:-45px;
+      top:-45px;
+      border-radius:50%;
+      background:radial-gradient(circle,rgba(36,183,255,.22),transparent 70%);
+      transition:.28s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-6px);
+      border-color:rgba(36,183,255,.48);
+      box-shadow:0 18px 40px rgba(0,0,0,.28),0 0 28px rgba(36,183,255,.10);
+    }
+
+    .card:hover::before{
+      transform:scale(1.22);
+    }
+
+    .card-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+    }
+
+    .icon{
+      width:52px;
+      height:52px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,rgba(36,183,255,.18),rgba(111,123,255,.18));
+      border:1px solid rgba(91,180,255,.25);
+      font-weight:900;
+      font-size:18px;
+      color:#dff6ff;
+    }
+
+    .status{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      color:#99f1c9;
+      font-size:12px;
+      font-weight:800;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(35,209,139,.08);
+      border:1px solid rgba(35,209,139,.18);
+    }
+
+    .status::before{
+      content:"";
+      width:7px;
+      height:7px;
+      border-radius:50%;
+      background:var(--success);
+      box-shadow:0 0 10px var(--success);
+    }
+
+    .card h3{
+      font-size:21px;
+      margin-top:18px;
+      letter-spacing:-.3px;
+    }
+
+    .card p{
+      color:var(--muted);
+      margin-top:7px;
+      font-size:14px;
+      line-height:1.55;
+    }
+
+    .open-row{
+      margin-top:18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .open-text{
+      color:#8fe0ff;
+      font-weight:800;
+      font-size:14px;
+    }
+
+    .arrow{
+      width:42px;
+      height:42px;
+      border-radius:13px;
+      display:grid;
+      place-items:center;
+      background:rgba(36,183,255,.10);
+      border:1px solid rgba(36,183,255,.22);
+      font-size:20px;
+      transition:.2s ease;
+    }
+
+    .card:hover .arrow{
+      transform:translate(2px,-2px);
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+    }
+
+    .empty{
+      display:none;
+      text-align:center;
+      padding:36px 15px 20px;
+      color:var(--muted);
+    }
+
+    footer{
+      padding:34px 0 46px;
+      text-align:center;
+      color:#71809a;
+      font-size:13px;
+    }
+
+    .note{
+      margin-top:14px;
+      font-size:12px;
+      color:#738098;
+    }
+
+    @media (max-width:900px){
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .hero{padding-top:62px}
+    }
+
+    @media (max-width:620px){
+      .wrap{width:min(100% - 20px,1120px)}
+      .nav{min-height:68px}
+      .brand-text{font-size:14px}
+      .brand-text span{display:none}
+      .nav-btn{padding:10px 13px;font-size:13px}
+      .hero{padding:50px 0 30px}
+      .hero h1{letter-spacing:-1.8px}
+      .hero p{font-size:15px}
+      .btn{width:100%}
+      .panel{padding:14px;border-radius:20px}
+      .toolbar{align-items:stretch}
+      .search-box{max-width:none}
+      .grid{grid-template-columns:1fr}
+      .card{min-height:170px}
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="wrap nav">
+      <a class="brand" href="#home">
+        <div class="brand-mark">S</div>
+        <div class="brand-text">
+          STUDY HUB
+          <span>Learning beyond limits</span>
+        </div>
+      </a>
+
+      <a class="nav-btn" href="#platforms">Explore Platforms</a>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero wrap">
+      <div class="badge"><span class="badge-dot"></span> All learning platforms in one place</div>
+
+      <h1>
+        StudyHub smarter with your
+        <span class="gradient-text">favourite platforms</span>
+      </h1>
+
+      <p>
+        Open your study resources quickly, search any platform and join the Telegram community for the latest updates.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://t.me/+Xa32ECHcOWRlYzg9" target="_blank" rel="noopener">
+          <span>✈</span> Join Telegram
+        </a>
+
+        <a class="btn btn-secondary" href="#platforms">
+          <span>↓</span> View Platforms
+        </a>
+      </div>
+
+      <section class="panel" id="platforms">
+        <div class="toolbar">
+          <div class="section-title">
+            <h2>Study Platforms</h2>
+            <p>Click any card to open its link.</p>
+          </div>
+
+          <label class="search-box" aria-label="Search platform">
+            <input id="searchInput" type="search" placeholder="Search platform..." autocomplete="off" />
+            <span class="search-icon">⌕</span>
+          </label>
+        </div>
+
+        <div class="grid" id="platformGrid">
+
+        
+          <a class="card" href="https://rwaweb.vercel.app/dashboard" target="_blank" data-name="RWA">
+            <div>
+              <div class="card-top">
+                <div class="icon">RW</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>RWA</h3>
+              <p>Open RWA study resources and learning content.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+          </a>
+          <a class="card" href="https://www.mediafire.com/file/jbcxp3vse59f4gu/RWA_v11.21.06_TheMadXABhi.apk/file" target="_blank" data-name="RWA App">
+            <div>
+              <div class="card-top">
+                <div class="icon">RW APP</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>RWA App</h3>
+              <p>Access RWA app for study resources and learning content.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+          </a>
+          <a class="card" href="https://unacademy.thescholarverse.site/auth" target="_blank" data-name="Unacademy">
+            <div>
+              <div class="card-top">
+                <div class="icon">Unacademy</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>Unacademy</h3>
+              <p>Find Unacademy learning material and class content.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+            </a>
+
+          <a class="card" href="https://www.mediafire.com/file/p8h1kcr3qs2w3yf/CareerWill_v15.21.06_by_TheMadXABhi.apk/file" target="_blank" data-name="CW">
+            <div>
+              <div class="card-top">
+                <div class="icon">CW</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>CW</h3>
+              <p>Access CW classes, notes and useful resources.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+          </a>
+
+          <a class="card" href="https://www.mediafire.com/file/3dvsjfodypnv3kt/KhanGlobalStudies_v23.02.7_by_TheMadXABhi.apk/file" target="_blank" data-name="KGS">
+            <div>
+              <div class="card-top">
+                <div class="icon">KGS</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>KGS</h3>
+              <p>Find KGS learning material and class content.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+          </a>
+          <a class="card" href="https://maxxsw.netlify.app/" target="_blank" data-name="SW Way">
+            <div>
+              <div class="card-top">
+                <div class="icon">SH</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>Selection way</h3>
+              <p>Download Selection way app for quick access to platforms.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+          </a>
+
+          <a class="card" href="https://studyiq.thescholarverse.site/auth" target="_blank" data-name="IQ Study">
+            <div>
+              <div class="card-top">
+                <div class="icon">IQ</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>IQ Study</h3>
+              <p>Quick access to IQ Study courses and resources.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+          </a>
+          <a class="card" href="https://www.mediafire.com/file/h1vzuwhqx74murr/KD_Live_v10.21.06_TheMadXABhi.apk/file" target="_blank" data-name="KD Live">
+            <div>
+              <div class="card-top">
+                <div class="icon">KD</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>KD Live</h3>
+              <p>Find KD Live learning material and class content.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+          </a>
+          <a class="card" href="https://t.me/+gHvUMwdwQpZiZTM9" target="_blank" data-name="Books hub">
+            <div>
+              <div class="card-top">
+                <div class="icon">Books</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>Books hub</h3>
+              <p>Access Books hub for study resources.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+          </a>
+          <a class="card" href="Not availabe" target="_blank" data-name="Videshgram">
+            <div>
+              <div class="card-top">
+                <div class="icon">VG</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>Videshgram</h3>
+              <p>Explore Videshgram learning content and updates.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+          </a>
+
+          <a class="card" href="https://rankersugurukul.vercel.app/" target="_blank" data-name="RJ Vikramjeet">
+            <div>
+              <div class="card-top">
+                <div class="icon">RJ</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>RJ Vikramjeet</h3>
+              <p>Open RJ Vikramjeet classes and study resources.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+          </a>
+
+          <a class="card" href="https://test.pwthor.live/" target="_blank" data-name="Textbook">
+            <div>
+              <div class="card-top">
+                <div class="icon">TB</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>Textbook</h3>
+              <p>Read textbooks and open useful study material.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+          </a>
+
+          <a class="card" href="https://rwaweb.vercel.app/paid-tests" target="_blank" data-name="RWA Test Series">
+            <div>
+              <div class="card-top">
+                <div class="icon">RT</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>RWA Test Series</h3>
+              <p>Practice mock tests and improve your preparation.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+          </a>
+
+          <a class="card" href="https://sachinclassex1.vercel.app/" target="_blank" data-name="Sachin Academy">
+            <div>
+              <div class="card-top">
+                <div class="icon">SA</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>Sachin Academy</h3>
+              <p>Access Sachin Academy classes and learning content.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+          </a>
+          <a class="card" href="https://www.mediafire.com/file/xf11ge0alhiyxn1/Utkarsh_Classes_v2.21.06_by_TheMadXABhi.apk/file" target="_blank" data-name="Utkarsh">
+            <div>
+              <div class="card-top">
+                <div class="icon">SH</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>Utkarsh</h3>
+              <p>Download Utkarsh app for quick access to platforms.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+          </a>
+          <a class="card" href="https://pwthor.live/study/batches" target="_blank"` data-name="PW STUDY ">
+            <div>
+              <div class="card-top">
+                <div class="icon">SH</div>
+                <div class="status">Available</div>
+              </div>
+              <h3>Pw study</h3>
+              <p>Download pw study for quick access to platforms.</p>
+            </div>
+            <div class="open-row">
+              <span class="open-text">Open Platform</span>
+              <span class="arrow">↗</span>
+            </div>
+          </a>
+        </div>
+
+        <b class="note">
+            <h1 style="color: #2469b9;"> Prince StudyHub</h1> 
+        </div>
+      </section>
+    </section>
+  </main>  
+
+  <footer class="wrap">
+    © <span id="year"></span> Study Hub. All rights reserved.
+  </footer>
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+    const cards = [...document.querySelectorAll(".card")];
+    const emptyState = document.getElementById("emptyState");
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+
+      cards.forEach(card => {
+        const name = card.dataset.name.toLowerCase();
+        const show = name.includes(query);
+        card.style.display = show ? "flex" : "none";
+        if (show) visible++;
+      });
+
+      emptyState.style.display = visible ? "none" : "block";
+    });
+
+    cards.forEach(card => {
+      card.addEventListener("click", (event) => {
+        if (card.getAttribute("href") === "#") {
+          event.preventDefault();
+          alert("इस बटन का link अभी add नहीं किया गया है। HTML file में href=\"#\" की जगह अपना link डालें।");
+        }
+      });
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
